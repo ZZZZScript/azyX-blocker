@@ -485,8 +485,7 @@ local function triggerClosestUnlock(yLevel, maxY)
             bestPrompt:InputEnded(Enum.UserInputType.MouseButton1)
         end
     end
-end-- [[ JAY REMASTERD - PARTE 2/2 ]]
-
+end
 local Theme = {
     Background      = Color3.fromRGB(8, 15, 40),
     Surface         = Color3.fromRGB(15, 25, 60),
