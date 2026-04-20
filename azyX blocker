@@ -1,6 +1,4 @@
--- [[ JAY REMASTERD - TAMANHOS AUMENTADOS ]]
--- [[ Script completo com interface maior ]]
--- [[ Coloque este arquivo no seu GitHub ]]
+-- [[ JAY REMASTERD - PARTE 1/2 ]]
 
 if not game:IsLoaded() then game.Loaded:Wait() end
 pcall(function() game:GetService("Players").RespawnTime = 0 end)
@@ -112,7 +110,6 @@ end
 
 local IS_MOBILE = isMobile()
 
-
 local FileName = "jay_remasterd_v1.json" 
 local PriorityFileName = "jay_remasterd_priority.json"
 local DefaultConfig = {
@@ -216,7 +213,6 @@ local DefaultConfig = {
     BlacklistedUsers = {},
 }
 
-
 local Config = DefaultConfig
 
 if isfile and isfile(FileName) then
@@ -240,7 +236,6 @@ if isfile and isfile(FileName) then
     end)
 end
 Config.ProximityAP = false
-
 
 local function deepCopy(t)
     if type(t) ~= "table" then return t end
@@ -287,15 +282,14 @@ _G.SinkSliderValue = Config.SinkSliderValue
 _G.AutoRecoverLagback = Config.AutoRecoverLagback
 _G.AutoInvisDuringSteal = Config.AutoInvisDuringSteal
 _G.ShowServerPos = Config.ShowServerPos
-
-    _G.INVISIBLE_STEAL_KEY = Enum.KeyCode[Config.InvisToggleKey] or Enum.KeyCode.I
+_G.INVISIBLE_STEAL_KEY = Enum.KeyCode[Config.InvisToggleKey] or Enum.KeyCode.I
 _G.invisibleStealEnabled = false
 _G.RecoveryInProgress = false
 
 local function getControls()
-	local playerScripts = LocalPlayer:WaitForChild("PlayerScripts")
-	local playerModule = require(playerScripts:WaitForChild("PlayerModule"))
-	return playerModule:GetControls()
+    local playerScripts = LocalPlayer:WaitForChild("PlayerScripts")
+    local playerModule = require(playerScripts:WaitForChild("PlayerModule"))
+    return playerModule:GetControls()
 end
 
 local Controls = getControls()
@@ -324,10 +318,9 @@ local function walkForward(seconds)
     end)
 end
 
-
--- Desync: activated by steal/clone only
+-- Desync
 local hooked = false
-_G._updateDesyncPill = nil -- set after HUD builds
+_G._updateDesyncPill = nil
 
 local function send_hook(packet)
     if packet.PacketId == 0x1B then
@@ -373,7 +366,6 @@ local function instantClone()
         local hum = char and char:FindFirstChildOfClass("Humanoid")
         if not (char and hum) then error("No character") end
 
-        -- Find the cloner anywhere
         local cloner = LocalPlayer.Backpack:FindFirstChild("Quantum Cloner")
             or char:FindFirstChild("Quantum Cloner")
         if not cloner then
@@ -381,25 +373,21 @@ local function instantClone()
             error("No Quantum Cloner")
         end
 
-        -- Equip with retries until confirmed inside character
         for attempt = 1, 5 do
             if char:FindFirstChild("Quantum Cloner") then break end
             pcall(function() hum:EquipTool(cloner) end)
             task.wait(0.2)
         end
 
-        -- If still not in char after retries, bail
         cloner = char:FindFirstChild("Quantum Cloner")
         if not cloner then
             warn("[CLONE] Failed to equip Quantum Cloner after 5 attempts!")
             error("Equip failed")
         end
 
-        -- Activate the now-equipped tool
         cloner:Activate()
         task.wait(0.2)
 
-        -- Wait for the clone to appear in workspace
         local cloneName = tostring(LocalPlayer.UserId) .. "_Clone"
         local cloneFound = false
         for _ = 1, 100 do
@@ -415,7 +403,6 @@ local function instantClone()
             error("Clone never spawned")
         end
 
-        -- Find and click the TeleportToClone button
         local toolsFrames = LocalPlayer.PlayerGui:FindFirstChild("ToolsFrames")
         local qcFrame = toolsFrames and toolsFrames:FindFirstChild("QuantumCloner")
         local tpButton = qcFrame and qcFrame:FindFirstChild("TeleportToClone")
@@ -445,7 +432,6 @@ local function instantClone()
 
     _G.isCloning = false
 
-    -- Auto TP directly to brainrot 0.3s after clone completes
     task.spawn(function()
         task.wait(0.3)
         if _G.tpToBrainrot then _G.tpToBrainrot() end
@@ -463,10 +449,8 @@ local function triggerClosestUnlock(yLevel, maxY)
     local bestPrompt = nil
     local shortestDist = math.huge
 
-    -- search entire workspace not just plots
     for _, obj in ipairs(Workspace:GetDescendants()) do
         if obj:IsA("ProximityPrompt") and obj.Enabled then
-            -- skip steal prompts
             if obj.ActionText == "Steal" then continue end
 
             local part = obj.Parent
@@ -501,11 +485,8 @@ local function triggerClosestUnlock(yLevel, maxY)
             bestPrompt:InputEnded(Enum.UserInputType.MouseButton1)
         end
     end
-end
+end-- [[ JAY REMASTERD - PARTE 2/2 ]]
 
--- ============================================
--- THEME COM TAMANHOS AUMENTADOS
--- ============================================
 local Theme = {
     Background      = Color3.fromRGB(8, 15, 40),
     Surface         = Color3.fromRGB(15, 25, 60),
@@ -518,54 +499,22 @@ local Theme = {
     Error           = Color3.fromRGB(255, 60, 80),
 }
 
--- TAMANHOS AUMENTADOS
 local SCALE = 1.3
 local MOBILE_SCALE = IS_MOBILE and 0.8 or 1.3
 
 local PRIORITY_LIST = {
-   "Strawberry Elephant",
-   "Meowl",
-   "Skibidi Toilet",
-   "Headless Horseman",
-   "Dragon Gingerini",
-   "Dragon Cannelloni",
-   "Ketupat Bros",
-   "Hydra Dragon Cannelloni",
-   "La Supreme Combinasion",
-   "Love Love Bear",
-   "Ginger Gerat",
-   "Cerberus",
-   "Capitano Moby",
-   "La Casa Boo",
-   "Burguro and Fryuro",
-   "Spooky and Pumpky",
-   "Cooki and Milki",
-   "Rosey and Teddy",
-   "Popcuru and Fizzuru",
-   "Reinito Sleighito",
-   "Fragrama and Chocrama",
-   "Garama and Madundung",
-   "Ketchuru and Musturu",
-   "La Secret Combinasion",
-   "Tralaledon",
-   "Tictac Sahur",
-   "Ketupat Kepat",
-   "Tang Tang Keletang",
-   "Orcaledon",
-   "La Ginger Sekolah",
-   "Los Spaghettis",
-   "Lavadorito Spinito",
-   "Swaggy Bros",
-   "La Taco Combinasion",
-   "Los Primos",
-   "Chillin Chili",
-   "Tuff Toucan",
-   "W or L",
-   "Chillin Chili",
-   "Chipso and Queso"
+   "Strawberry Elephant", "Meowl", "Skibidi Toilet", "Headless Horseman",
+   "Dragon Gingerini", "Dragon Cannelloni", "Ketupat Bros", "Hydra Dragon Cannelloni",
+   "La Supreme Combinasion", "Love Love Bear", "Ginger Gerat", "Cerberus",
+   "Capitano Moby", "La Casa Boo", "Burguro and Fryuro", "Spooky and Pumpky",
+   "Cooki and Milki", "Rosey and Teddy", "Popcuru and Fizzuru", "Reinito Sleighito",
+   "Fragrama and Chocrama", "Garama and Madundung", "Ketchuru and Musturu",
+   "La Secret Combinasion", "Tralaledon", "Tictac Sahur", "Ketupat Kepat",
+   "Tang Tang Keletang", "Orcaledon", "La Ginger Sekolah", "Los Spaghettis",
+   "Lavadorito Spinito", "Swaggy Bros", "La Taco Combinasion", "Los Primos",
+   "Chillin Chili", "Tuff Toucan", "W or L", "Chillin Chili", "Chipso and Queso"
 }
 
--- Load priority list from file if it exists
 if isfile and isfile(PriorityFileName) then
     pcall(function()
         local ok, decoded = pcall(function() return HttpService:JSONDecode(readfile(PriorityFileName)) end)
@@ -606,6 +555,7 @@ end
 local function CreateGradient(parent)
     return nil
 end
+
 local function ApplyViewportUIScale(targetFrame, designWidth, designHeight, minScale, maxScale)
     if not targetFrame then return end
     if not IS_MOBILE then return end
@@ -728,7 +678,7 @@ local function ShowNotification(title, text)
     sg.Name = "JayRemasterd_Notif"; sg.ResetOnSpawn = false
 
     local f = Instance.new("Frame", sg)
-    f.Size = UDim2.new(0, 350, 0, 65) -- AUMENTADO
+    f.Size = UDim2.new(0, 350, 0, 65)
     f.Position = UDim2.new(0.5, -175, 0, 80)
     f.BackgroundColor3 = Color3.fromRGB(8, 15, 40)
     f.BackgroundTransparency = 1
@@ -1028,7 +978,6 @@ local function stopAntiRagdoll()
     if Connections.antiRagdollConn then Connections.antiRagdollConn:Disconnect(); Connections.antiRagdollConn = nil end
     antiRagdollConn = Connections.antiRagdollConn
 end
-
 
 local function startAntiRagdoll(mode)
     stopAntiRagdoll()
@@ -1364,7 +1313,6 @@ task.spawn(function()
 
     local autoStealEnabled   = true
     
-    
     if Config.DefaultToPriority and Config.DefaultToHighest then
         Config.DefaultToHighest = false
     end
@@ -1388,21 +1336,18 @@ task.spawn(function()
         Config.StealNearest = true
         Config.StealHighest = false
         Config.StealPriority = false
-        
         Config.AutoTPPriority = true
     elseif Config.DefaultToHighest then
         stealHighestEnabled = true
         Config.StealHighest = true
         Config.StealNearest = false
         Config.StealPriority = false
-        
         Config.AutoTPPriority = false
     elseif Config.DefaultToPriority then
         stealPriorityEnabled = true
         Config.StealPriority = true
         Config.StealNearest = false
         Config.StealHighest = false
-        
         Config.AutoTPPriority = true
     else
         stealNearestEnabled = Config.StealNearest
@@ -1477,13 +1422,13 @@ task.spawn(function()
         return out
     end
 
-    -- TAMANHOS AUMENTADOS NO GUI DO AUTO STEAL
+    -- GUI DO AUTO STEAL (TAMANHOS AUMENTADOS)
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "JayRemasterd_UI"; screenGui.ResetOnSpawn = false; screenGui.Parent = PlayerGui
 
-    local mobileScale = IS_MOBILE and 0.7 or 1.4 -- AUMENTADO
+    local mobileScale = IS_MOBILE and 0.7 or 1.4
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 380*mobileScale, 0, 680*mobileScale) -- AUMENTADO
+    frame.Size = UDim2.new(0, 380*mobileScale, 0, 680*mobileScale)
     frame.Position = UDim2.new(Config.Positions.AutoSteal.X, 0, Config.Positions.AutoSteal.Y, 0)
     frame.BackgroundColor3 = Color3.fromRGB(8, 15, 40)
     frame.BackgroundTransparency = 0
@@ -1499,9 +1444,8 @@ task.spawn(function()
     ApplyViewportUIScale(frame, 380, 680, 0.45, 0.8)
     AddMobileMinimize(frame, "JAY REMASTERD")
 
-    -- â”€â”€ Header â”€â”€
     local header = Instance.new("Frame", frame)
-    header.Size = UDim2.new(1, 0, 0, 65) -- AUMENTADO
+    header.Size = UDim2.new(1, 0, 0, 65)
     header.BackgroundColor3 = Color3.fromRGB(12, 20, 50)
     header.BackgroundTransparency = 0
     header.BorderSizePixel = 0
@@ -1514,9 +1458,8 @@ task.spawn(function()
 
     MakeDraggable(header, frame, "AutoSteal")
 
-    -- Logo circle
     local logoCircle = Instance.new("Frame", header)
-    logoCircle.Size = UDim2.new(0, 38, 0, 38) -- AUMENTADO
+    logoCircle.Size = UDim2.new(0, 38, 0, 38)
     logoCircle.Position = UDim2.new(0, 12, 0.5, 0)
     logoCircle.AnchorPoint = Vector2.new(0, 0.5)
     logoCircle.BackgroundColor3 = Color3.fromRGB(10, 18, 45)
@@ -1530,39 +1473,38 @@ task.spawn(function()
     logoLbl.BackgroundTransparency = 1
     logoLbl.Text = "R"
     logoLbl.Font = Enum.Font.GothamBlack
-    logoLbl.TextSize = 20 -- AUMENTADO
+    logoLbl.TextSize = 20
     logoLbl.TextColor3 = Color3.fromRGB(210, 210, 220)
 
     local titleLabel = Instance.new("TextLabel", header)
-    titleLabel.Size = IS_MOBILE and UDim2.new(0.5, 0, 0, 24) or UDim2.new(0.6, 0, 0, 24) -- AUMENTADO
+    titleLabel.Size = IS_MOBILE and UDim2.new(0.5, 0, 0, 24) or UDim2.new(0.6, 0, 0, 24)
     titleLabel.Position = UDim2.new(0, 58, 0, 10)
     titleLabel.BackgroundTransparency = 1
     titleLabel.Text = "jay remasterd"
     titleLabel.Font = Enum.Font.GothamBlack
-    titleLabel.TextSize = 18 -- AUMENTADO
+    titleLabel.TextSize = 18
     titleLabel.TextColor3 = Color3.fromRGB(225, 225, 232)
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
     local subLabel = Instance.new("TextLabel", header)
-    subLabel.Size = UDim2.new(0.7, 0, 0, 18) -- AUMENTADO
+    subLabel.Size = UDim2.new(0.7, 0, 0, 18)
     subLabel.Position = UDim2.new(0, 58, 0, 36)
     subLabel.BackgroundTransparency = 1
     subLabel.Text = "/ jay remasterd"
     subLabel.Font = Enum.Font.GothamMedium
-    subLabel.TextSize = 13 -- AUMENTADO
+    subLabel.TextSize = 13
     subLabel.TextColor3 = Color3.fromRGB(80, 80, 92)
     subLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Status row
     local statusRow = Instance.new("Frame", frame)
-    statusRow.Size = UDim2.new(1, -24, 0, 55) -- AUMENTADO
+    statusRow.Size = UDim2.new(1, -24, 0, 55)
     statusRow.Position = UDim2.new(0, 12, 0, 75)
     statusRow.BackgroundColor3 = Color3.fromRGB(12, 20, 50)
     statusRow.BorderSizePixel = 0
     Instance.new("UICorner", statusRow).CornerRadius = UDim.new(0, 12)
 
     local statusDot = Instance.new("Frame", statusRow)
-    statusDot.Size = UDim2.new(0, 10, 0, 10) -- AUMENTADO
+    statusDot.Size = UDim2.new(0, 10, 0, 10)
     statusDot.Position = UDim2.new(0, 12, 0.35, 0)
     statusDot.AnchorPoint = Vector2.new(0, 0.5)
     statusDot.BackgroundColor3 = Color3.fromRGB(40, 70, 140)
@@ -1570,12 +1512,12 @@ task.spawn(function()
     Instance.new("UICorner", statusDot).CornerRadius = UDim.new(1, 0)
 
     local stealStatusLbl = Instance.new("TextLabel", statusRow)
-    stealStatusLbl.Size = UDim2.new(0.6, 0, 0, 22) -- AUMENTADO
+    stealStatusLbl.Size = UDim2.new(0.6, 0, 0, 22)
     stealStatusLbl.Position = UDim2.new(0, 28, 0, 8)
     stealStatusLbl.BackgroundTransparency = 1
     stealStatusLbl.Text = "Steal: Idle"
     stealStatusLbl.Font = Enum.Font.GothamMedium
-    stealStatusLbl.TextSize = 14 -- AUMENTADO
+    stealStatusLbl.TextSize = 14
     stealStatusLbl.TextColor3 = Color3.fromRGB(140, 140, 155)
     stealStatusLbl.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -1585,32 +1527,31 @@ task.spawn(function()
     targetLabel.BackgroundTransparency = 1
     targetLabel.Text = "No target"
     targetLabel.Font = Enum.Font.GothamBold
-    targetLabel.TextSize = 13 -- AUMENTADO
+    targetLabel.TextSize = 13
     targetLabel.TextColor3 = Color3.fromRGB(100, 100, 112)
     targetLabel.TextXAlignment = Enum.TextXAlignment.Left
     targetLabel.TextTruncate = Enum.TextTruncate.AtEnd
 
     local targetsLbl = Instance.new("TextLabel", statusRow)
-    targetsLbl.Size = UDim2.new(0, 100, 0, 18) -- AUMENTADO
+    targetsLbl.Size = UDim2.new(0, 100, 0, 18)
     targetsLbl.Position = UDim2.new(1, -108, 0, 8)
     targetsLbl.BackgroundTransparency = 1
     targetsLbl.Text = "Targets: 0"
     targetsLbl.Font = Enum.Font.GothamBold
-    targetsLbl.TextSize = 12 -- AUMENTADO
+    targetsLbl.TextSize = 12
     targetsLbl.TextColor3 = Color3.fromRGB(80, 80, 92)
     targetsLbl.TextXAlignment = Enum.TextXAlignment.Right
 
     local playersLbl = Instance.new("TextLabel", statusRow)
-    playersLbl.Size = UDim2.new(0, 100, 0, 18) -- AUMENTADO
+    playersLbl.Size = UDim2.new(0, 100, 0, 18)
     playersLbl.Position = UDim2.new(1, -108, 0, 30)
     playersLbl.BackgroundTransparency = 1
     playersLbl.Text = "Players: 0"
     playersLbl.Font = Enum.Font.GothamBold
-    playersLbl.TextSize = 12 -- AUMENTADO
+    playersLbl.TextSize = 12
     playersLbl.TextColor3 = Color3.fromRGB(80, 80, 92)
     playersLbl.TextXAlignment = Enum.TextXAlignment.Right
 
-    -- Progress bar
     local progressBg = Instance.new("Frame", statusRow)
     progressBg.Size = UDim2.new(1, 0, 0, 4)
     progressBg.Position = UDim2.new(0, 0, 1, -4)
@@ -1623,20 +1564,18 @@ task.spawn(function()
     Instance.new("UICorner", progressBarFill).CornerRadius = UDim.new(1, 0)
     Instance.new("UICorner", progressBg).CornerRadius = UDim.new(1, 0)
 
-    -- Section label
     local selectLabel = Instance.new("TextLabel", frame)
-    selectLabel.Size = UDim2.new(1, -24, 0, 22) -- AUMENTADO
+    selectLabel.Size = UDim2.new(1, -24, 0, 22)
     selectLabel.Position = UDim2.new(0, 12, 0, 138)
     selectLabel.BackgroundTransparency = 1
     selectLabel.Text = "AVAILABLE BRAINROTS"
     selectLabel.Font = Enum.Font.GothamBlack
-    selectLabel.TextSize = 12 -- AUMENTADO
+    selectLabel.TextSize = 12
     selectLabel.TextColor3 = Color3.fromRGB(80, 80, 92)
     selectLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Brainrot list
     local listFrame = Instance.new("ScrollingFrame", frame)
-    listFrame.Size = UDim2.new(1, -16, 1, -160) -- AUMENTADO
+    listFrame.Size = UDim2.new(1, -16, 1, -160)
     listFrame.Position = UDim2.new(0, 8, 0, 165)
     listFrame.BackgroundTransparency = 1
     listFrame.BorderSizePixel = 0
@@ -1648,39 +1587,32 @@ task.spawn(function()
     uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
     Instance.new("UIPadding", listFrame).PaddingLeft = UDim.new(0, 6)
 
-    -- Bottom controls
     local toggleBtnContainer = Instance.new("Frame", frame)
-    toggleBtnContainer.Size = UDim2.new(1, -24, 0, 120) -- AUMENTADO
+    toggleBtnContainer.Size = UDim2.new(1, -24, 0, 120)
     toggleBtnContainer.Position = UDim2.new(0, 12, 1, -130)
     toggleBtnContainer.BackgroundTransparency = 1
 
-    -- Auto Steal enable toggle
     local enableBtn = Instance.new("TextButton", toggleBtnContainer)
-    local mobileButtonScale = IS_MOBILE and 1.4 or 1.3 -- AUMENTADO
-    enableBtn.Size = UDim2.new(1, 0, 0, 46*mobileButtonScale) -- AUMENTADO
+    local mobileButtonScale = IS_MOBILE and 1.4 or 1.3
+    enableBtn.Size = UDim2.new(1, 0, 0, 46*mobileButtonScale)
     enableBtn.Position = UDim2.new(0, 0, 0, 0)
     enableBtn.BackgroundColor3 = Theme.Success
     enableBtn.Text = "AUTO STEAL: ON"
     enableBtn.Font = Enum.Font.GothamBlack
-    enableBtn.TextSize = 16*mobileButtonScale -- AUMENTADO
+    enableBtn.TextSize = 16*mobileButtonScale
     enableBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
     enableBtn.BorderSizePixel = 0
     enableBtn.AutoButtonColor = false
     Instance.new("UICorner", enableBtn).CornerRadius = UDim.new(0, 12)
 
-    -- Instant Steal button
     local instantStealBtn = Instance.new("TextButton", toggleBtnContainer)
-    instantStealBtn.Size = UDim2.new(1, 0, 0, 38*mobileButtonScale) -- AUMENTADO
+    instantStealBtn.Size = UDim2.new(1, 0, 0, 38*mobileButtonScale)
     instantStealBtn.Position = UDim2.new(0, 0, 0, 52*mobileButtonScale)
-    instantStealBtn.BackgroundColor3 = instantStealEnabled
-        and Color3.fromRGB(28, 100, 60)
-        or Color3.fromRGB(18, 30, 65)
+    instantStealBtn.BackgroundColor3 = instantStealEnabled and Color3.fromRGB(28, 100, 60) or Color3.fromRGB(18, 30, 65)
     instantStealBtn.Text = instantStealEnabled and "INSTANT STEAL: ON" or "INSTANT STEAL: OFF"
     instantStealBtn.Font = Enum.Font.GothamBold
-    instantStealBtn.TextSize = 14*mobileButtonScale -- AUMENTADO
-    instantStealBtn.TextColor3 = instantStealEnabled
-        and Color3.fromRGB(180, 240, 200)
-        or Color3.fromRGB(100, 100, 115)
+    instantStealBtn.TextSize = 14*mobileButtonScale
+    instantStealBtn.TextColor3 = instantStealEnabled and Color3.fromRGB(180, 240, 200) or Color3.fromRGB(100, 100, 115)
     instantStealBtn.BorderSizePixel = 0
     instantStealBtn.AutoButtonColor = false
     Instance.new("UICorner", instantStealBtn).CornerRadius = UDim.new(0, 12)
@@ -1689,22 +1621,19 @@ task.spawn(function()
     instantStroke.Thickness = 1.5
     instantStroke.Transparency = 0.3
 
-    -- Customize Priority button
     local customizePriorityBtn = Instance.new("TextButton", toggleBtnContainer)
     customizePriorityBtn.Size = UDim2.new(1, 0, 0, 26)
     customizePriorityBtn.Position = UDim2.new(0, 0, 0, 96*mobileButtonScale)
     customizePriorityBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     customizePriorityBtn.Text = "Customize Priority"
     customizePriorityBtn.Font = Enum.Font.GothamMedium
-    customizePriorityBtn.TextSize = 12 -- AUMENTADO
+    customizePriorityBtn.TextSize = 12
     customizePriorityBtn.TextColor3 = Color3.fromRGB(90, 90, 105)
     customizePriorityBtn.BorderSizePixel = 0
     customizePriorityBtn.AutoButtonColor = false
     customizePriorityBtn.Visible = not IS_MOBILE
     Instance.new("UICorner", customizePriorityBtn).CornerRadius = UDim.new(0, 8)
 
-    -- O RESTO DO SCRIPT CONTINUA IGUAL, APENAS OS TAMANHOS FORAM AUMENTADOS
-    
     print("========================================")
     print("JAY REMASTERD - TAMANHOS AUMENTADOS")
     print("Interface maior e mais legível!")
